@@ -34,6 +34,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.rememberAsyncImagePainter
 import com.example.mymovieapp.addusers.AddUserScreen
 import com.example.mymovieapp.moviedetails.MovieDetailScreen
+import com.example.mymovieapp.moviedetails.MovieDetailViewModel
 import com.example.mymovieapp.movielist.MovieScreen
 import com.example.mymovieapp.ui.theme.MyMovieAppTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -71,9 +72,12 @@ fun MainScreen() {
 
         }
         composable("movie_details/{movieId}",
-            arguments = listOf(navArgument("movieId"){ type = NavType.IntType })){
-            val movieId = it.arguments?.getInt("movieId")?: 0
-            MovieDetailScreen(movieId=movieId)
+            arguments = listOf(navArgument("movieId"){ type = NavType.IntType }))
+        {  backStackEntry ->
+            val movieId = backStackEntry.arguments?.getInt("movieId") ?: 0
+            val viewModel: MovieDetailViewModel = hiltViewModel(backStackEntry)
+            MovieDetailScreen(movieId = movieId, viewModel = viewModel)
+
 
         }
     }

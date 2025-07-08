@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -112,26 +113,47 @@ fun MovieScreen(userId: Int, viewModel: MovieViewModel=hiltViewModel(),
 
 @Composable
 fun MovieCard(movie: Movie, onClick: () -> Unit) {
+    val posterPath = movie.posterPath?: ""
+    val releaseDate = movie.releaseDate ?: "N/A"
+    val imageUrl = if(posterPath.isNotEmpty())
+        "https://image.tmdb.org/t/p/w500$posterPath"
+    else null
+
+
     Card (modifier = Modifier
         .padding(8.dp)
         .fillMaxWidth()
         .clickable { onClick() },
         elevation = CardDefaults.cardElevation(4.dp)
     ) {
-        Column( modifier = Modifier.padding(10.dp)) {
-            val imageUrl = "https://image.tmdb.org/t/p/w185${movie.posterPath}"
-            AsyncImage(
-                model = imageUrl,
-                contentDescription = movie.title,
-                modifier = Modifier.size(50.dp),
-                contentScale = ContentScale.Crop
-            )
+        Column( modifier = Modifier.padding(8.dp).fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+            if(imageUrl != null){
+                AsyncImage(
+                    model = imageUrl,
+                    contentDescription = movie.title,
+                    modifier = Modifier.size(150.dp).fillMaxWidth(),
+                    contentScale = ContentScale.Crop
+                )
 
-            Spacer(modifier = Modifier.width(6.dp))
+            } else {
+                Box(
+                    modifier = Modifier
+                        .height(180.dp)
+                        .fillMaxWidth()
+                        .background(Color.LightGray),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text("No Image")
+                }
+
+            }
+
+
+            Spacer(modifier = Modifier.width(8.dp))
 
             Column {
-                Text(movie.title, fontWeight = FontWeight.Bold)
-                Text("Release: ${movie.releaseDate}")
+                Text(movie.title, fontWeight = FontWeight.Bold,style = MaterialTheme.typography.bodyLarge)
+                Text(text = "Release: $releaseDate", style = MaterialTheme.typography.bodyLarge)
             }
 
         }

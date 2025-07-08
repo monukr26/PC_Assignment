@@ -8,34 +8,37 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import javax.inject.Named
 import javax.inject.Singleton
 
 
 @Module
 @InstallIn(SingletonComponent::class)
 object MovieNetwork {
-
     @Provides
     @Singleton
-    fun provideMovieApi(): MovieApi{
+    @Named("TMDB")
+    fun provideTmdbRetrofit(): Retrofit {
         return Retrofit.Builder()
             .baseUrl("https://api.themoviedb.org/3/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-            .create(MovieApi::class.java)
     }
 
     @Provides
     @Singleton
-    fun provideMovieDetailApi(retrofit: Retrofit): MovieDetailApi {
-        return  retrofit.create(MovieDetailApi::class.java)
-
+    fun provideMovieApi(@Named("TMDB") retrofit: Retrofit): MovieApi {
+        return retrofit.create(MovieApi::class.java)
     }
 
     @Provides
     @Singleton
-    fun provideUserApi(retrofit: Retrofit): UserApi {
-        return retrofit.create(UserApi::class.java)
+    fun provideMovieDetailApi(@Named("TMDB") retrofit: Retrofit): MovieDetailApi {
+        return retrofit.create(MovieDetailApi::class.java)
     }
+
+
+
+
 
 }

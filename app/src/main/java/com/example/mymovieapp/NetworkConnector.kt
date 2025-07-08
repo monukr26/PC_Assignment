@@ -25,4 +25,11 @@ object NetworkConnector {
     @Provides
     @Singleton
     fun provideApi(retrofit: Retrofit): UserApi = retrofit.create(UserApi::class.java)
+
+
+    @Provides
+    @Singleton
+    fun provideUserApi(retrofit: Retrofit): com.example.mymovieapp.addusers.UserApi {
+        return retrofit.create(com.example.mymovieapp.addusers.UserApi::class.java)
+    }
 }

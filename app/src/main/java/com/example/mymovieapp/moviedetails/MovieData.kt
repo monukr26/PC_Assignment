@@ -1,10 +1,12 @@
 package com.example.mymovieapp.moviedetails
 
+import com.google.gson.annotations.SerializedName
+
 data class MovieData(
-    val id : Int,
-    val title : String,
-    val description : String,
-    val releaseDate : String,
-    val posterPath : String
+    @SerializedName("id") val id : Int,
+    @SerializedName("title") val title : String,
+    @SerializedName("overview") val description : String,
+    @SerializedName("release_date") val releaseDate : String,
+    @SerializedName("poster_path") val posterPath : String
 
 )
